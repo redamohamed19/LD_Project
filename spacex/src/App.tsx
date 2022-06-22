@@ -18,13 +18,6 @@ function App() {
   ])
   const [direction,SetDirection]=useState("right")
 
-
-  
-useEffect(()=>{
-  let sec=false
-    if(!sec){
-
-
 // Check if there is a obstacle at the provided coordinates.
 // Returns a Boolean
 const isThereObstacle = (x:Number, y:number) => {
@@ -32,22 +25,21 @@ const isThereObstacle = (x:Number, y:number) => {
   for (let i = 0; i < rocks.length; i++) {
     const rock = rocks[i];
     if (rock.x === x && rock.y === y) {
+      alert("Warning a obstacle is in["+rock.x+rock.y+"] position")
       return true;
     }
   }
   return false;
 };
 
-
   // Check if the provided coordinate is within the grid's bounds.
 // Returns a Boolean
 const isInGrid = (x:number, y:number) => {
-  if (x < 0 || y < 0 || x > 12   || y > 12) {
+  if (x < 0 || y < 0 || x > 6   || y > 6) {
     return false;
   }
   return true;
 }
-
 
 
 // Check if a player can move to the provided coordinates.
@@ -65,8 +57,7 @@ const canMoveTocoordinates = (x:number, y:number) => {
   }
   return true;
 };
-
-  // Move the character to an x,y grid coordinate.
+    // Move the character to an x,y grid coordinate.
 // Returns nothing
 const moveCharacterTo = (x:number, y:number) => {
 
@@ -124,25 +115,38 @@ const moveUp = () => {
   if(direction==="right")
   {
     if (canMoveTocoordinates(characterPos.x + 1, characterPos.y)) {
-      characterPos.x += 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x+1,
+        y:characterPos.y
+      }))
+      
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
   else  if(direction==="bottom"){
     if (canMoveTocoordinates(characterPos.x, characterPos.y + 1)) {
-      characterPos.y += 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x,
+        y:characterPos.y+1
+      }))
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
   else  if(direction==="left"){
     if (canMoveTocoordinates(characterPos.x - 1, characterPos.y)) {
-      characterPos.x -= 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x-1,
+        y:characterPos.y
+      }))
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
   else if(direction==="top"){
     if (canMoveTocoordinates(characterPos.x, characterPos.y - 1)) {
-      characterPos.y -= 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x,
+        y:characterPos.y-1
+      }))
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
@@ -154,29 +158,51 @@ const moveDown = () => {
   if(direction==="left")
   {
     if (canMoveTocoordinates(characterPos.x + 1, characterPos.y)) {
-      characterPos.x += 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x+1,
+        y:characterPos.y
+      }))
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
   else  if(direction==="top"){
     if (canMoveTocoordinates(characterPos.x, characterPos.y + 1)) {
-      characterPos.y += 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x,
+        y:characterPos.y+1
+      }))
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
   else  if(direction==="right"){
     if (canMoveTocoordinates(characterPos.x - 1, characterPos.y)) {
-      characterPos.x -= 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x-1,
+        y:characterPos.y
+      }))
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
   else  if(direction==="bottom"){
     if (canMoveTocoordinates(characterPos.x, characterPos.y - 1)) {
-      characterPos.y -= 1;
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x,
+        y:characterPos.y-1
+      }))
       moveCharacterTo(characterPos.x, characterPos.y);
     }
   }
 };
+useEffect(()=>{
+
+
+
+
+
+
+
+
+
 
 
 
@@ -206,10 +232,8 @@ document.body.addEventListener('keydown', evt => {
       break;
   }
 });
-    }
-  return ()=>{
-    sec=true
-  }
+    
+
 })
 
 
@@ -219,7 +243,7 @@ document.body.addEventListener('keydown', evt => {
 
 <div className="board" ref={board}>
         {rocks.map((elements)=>{
-          return (<div className='rock' style={{top: elements.x*100+"px",left: elements.y*100+"px"}}></div>)
+          return (<div className='rock' key={elements.x+elements.y} style={{top: elements.x*100+"px",left: elements.y*100+"px"}}></div>)
         })}
         <div className={"character " + (direction)}ref={character}></div>
       </div>
