@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useRef, useState } from 'react';
+
 import './App.css';
 
 function App() {
+
   const character=useRef<HTMLDivElement>(null)
   const board=useRef<HTMLDivElement>(null)
   const [characterPos,SetcharacterPos]=useState( {
@@ -17,7 +18,14 @@ function App() {
   ])
   const [direction,SetDirection]=useState("right")
 
-  // Check if there is a obstacle at the provided coordinates.
+
+  
+useEffect(()=>{
+  let sec=false
+    if(!sec){
+
+
+// Check if there is a obstacle at the provided coordinates.
 // Returns a Boolean
 const isThereObstacle = (x:Number, y:number) => {
   // Loop through obstacle, and check if any rock is at the given point.
@@ -29,6 +37,8 @@ const isThereObstacle = (x:Number, y:number) => {
   }
   return false;
 };
+
+
   // Check if the provided coordinate is within the grid's bounds.
 // Returns a Boolean
 const isInGrid = (x:number, y:number) => {
@@ -37,6 +47,9 @@ const isInGrid = (x:number, y:number) => {
   }
   return true;
 }
+
+
+
 // Check if a player can move to the provided coordinates.
 // Returns a Boolean
 const canMoveTocoordinates = (x:number, y:number) => {
@@ -52,7 +65,8 @@ const canMoveTocoordinates = (x:number, y:number) => {
   }
   return true;
 };
-// Move the character to an x,y grid coordinate.
+
+  // Move the character to an x,y grid coordinate.
 // Returns nothing
 const moveCharacterTo = (x:number, y:number) => {
 
@@ -65,6 +79,7 @@ const moveCharacterTo = (x:number, y:number) => {
 
 };
 }
+
 // Move the character left one tile, if Blerf can.
 const turnLeft = () => {
   if(direction==="right")
@@ -164,16 +179,55 @@ const moveDown = () => {
 };
 
 
+
+// Add an event listener for when the user presses keys.
+document.body.addEventListener('keydown', evt => {
+  const keyCode = evt.keyCode;
+  // If the user pressed any directional keys, 
+  // prevent the browser default of scrolling the page.
+  if ([76, 70, 82, 66].includes(keyCode)) {
+    evt.preventDefault();
+  }
+  // Attempt to move the character in the direction 
+  switch (keyCode) {
+    case 76:
+      turnLeft();
+      break;
+    case 70:
+      moveUp();
+      console.log(characterPos,direction)
+      break;
+    case 82:
+      turnRight();
+      break;
+    case 66:
+      moveDown();
+      console.log(characterPos,direction)
+      break;
+  }
+});
+    }
+  return ()=>{
+    sec=true
+  }
+})
+
+
+
   return (
-<div className="page-wrapper">
+    <div className="page-wrapper">
 
 <div className="board" ref={board}>
-     
-        <div className={"character " }ref={character}></div>
+        {rocks.map((elements)=>{
+          return (<div className='rock' style={{top: elements.x*100+"px",left: elements.y*100+"px"}}></div>)
+        })}
+        <div className={"character " + (direction)}ref={character}></div>
       </div>
 
     </div>
+  
   );
 }
+
 
 export default App;
