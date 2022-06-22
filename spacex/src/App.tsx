@@ -16,6 +16,19 @@ function App() {
     {x: 5, y: 5}
   ])
   const [direction,SetDirection]=useState("right")
+
+  // Check if there is a obstacle at the provided coordinates.
+// Returns a Boolean
+const isThereObstacle = (x:Number, y:number) => {
+  // Loop through obstacle, and check if any rock is at the given point.
+  for (let i = 0; i < rocks.length; i++) {
+    const rock = rocks[i];
+    if (rock.x === x && rock.y === y) {
+      return true;
+    }
+  }
+  return false;
+};
   return (
 <div className="page-wrapper">
 
