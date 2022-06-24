@@ -103,6 +103,52 @@ export default function Example() {
   let items=products;
   let tot=0;
   let totwd=0;
+  products.map((Element)=>{
+   
+    if(Element.name=="milk" ){
+      let prushare=0;
+      let qnt=Element.qty
+      while(qnt>=4){
+           prushare+=3;
+           qnt-=4
+      }
+      prushare+=qnt
+     
+      Element["Discount"]=prushare*Element.price
+     
+  
+  }
+  else if(Element.name=="bread"){
+    let x=0;
+    items.map((SElement)=>{
+        if(SElement.name=="butter"){
+         
+            if(SElement.qty%2==0){
+                x=SElement.qty/2;
+            }
+            else if(SElement.qty%2==1){
+                x=(SElement.qty-1)/2;
+            }
+        }
+    })
+
+            if(Element.qty<=x){
+                Element["Discount"]=Element.qty*Element.price*0.5
+            }
+            else{
+                let y=Element.qty-x;
+                Element["Discount"]=(x*Element.price*0.5)+y*Element.price
+            }
+       
+}
+else{
+  Element["Discount"]=Element.price*Element.qty
+  
+}
+  tot+=Element.Discount
+  totwd+=Element.price*Element.qty
+   
+})
   return(
     <div className="bg-gray-50">
             <Transition.Root show={open} as={Fragment}>
