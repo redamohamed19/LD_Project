@@ -16,6 +16,9 @@ function App() {
     {x: 3, y: 3},
   
   ])
+  let height=6;
+  let width=6;
+  
   const [direction,SetDirection]=useState("right")
   console.log(characterPos,direction)
 
@@ -36,7 +39,33 @@ const isThereObstacle = (x:Number, y:number) => {
   // Check if the provided coordinate is within the grid's bounds.
 // Returns a Boolean
 const isInGrid = (x:number, y:number) => {
-  if (x < 0 || y < 0 || x > 5   || y > 5) {
+  if (x < 0 || y < 0 || x > width   || y > height) {
+    if(x>width){
+      SetcharacterPos((characterPos)=>({
+        x:-1,
+        y:characterPos.y
+      }))
+    }
+    if(y>height){
+      SetcharacterPos((characterPos)=>({
+        x:characterPos.x,
+        y:-1
+      }))
+    }
+
+    if(x<0){
+      SetcharacterPos((characterPos)=>({
+        x:width+1,
+        y:characterPos.y
+      }))
+    }
+    if(y<0){
+      SetcharacterPos((characterPos)=>({
+       x:characterPos.x,
+       y:height+1
+      }))
+    }
+
     return false;
   }
   return true;
@@ -246,7 +275,7 @@ return () => {
   return (
     <div className="page-wrapper">
 
-<div className="board" ref={board}>
+<div className="board" style={{height: (height+1)*100,width: (width+1)*100}} ref={board}>
         {rocks.map((elements)=>{
           return (<div className='rock' key={elements.x+elements.y} style={{top: elements.x*100+"px",left: elements.y*100+"px"}}></div>)
         })}
